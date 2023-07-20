@@ -156,6 +156,18 @@
             // Return the most frequent number
             return mostFrequentNumber;
         }
+        public static int FindMaximumValue(int[] array)
+        {
+            int max = array[0]; // Assume the first element as the maximum
+
+            for (int i = 1; i < array.Length; i++)
+            {
+                if (array[i] > max)
+                    max = array[i];
+            }
+
+            return max;
+        }
 
 
 
