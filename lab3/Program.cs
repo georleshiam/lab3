@@ -1,6 +1,10 @@
 ﻿namespace lab3
+
 {
 
+    using System;
+    using System.IO;
+    using System.Linq;
 
     class Program
     {
@@ -170,9 +174,103 @@
         }
 
 
+        public static void SaveWordToFile()
+        {
+            Console.Write("Enter a word: ");
+            string word = Console.ReadLine();
 
+            try
+            {
+                // Append the word to the existing "words.txt" file or create a new one if it doesn't exist
+                using (StreamWriter writer = File.AppendText("words.txt"))
+                {
+                    writer.WriteLine(word);
+                    Console.WriteLine("Word saved to the file.");
+                }
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error writing to file: {ex.Message}");
+            }
+        }
 
+        public static void ReadWordsFromFile()
+        {
+            try
+            {
+                if (File.Exists("words.txt"))
+                {
+                    string[] words = File.ReadAllLines("words.txt");
+                    if (words.Length > 0)
+                    {
+                        Console.WriteLine("Words in the file:");
+                        foreach (string word in words)
+                        {
+                            Console.WriteLine(word);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("The file is empty.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("The file 'words.txt' does not exist.");
+                }
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error reading from file: {ex.Message}");
+            }
+        }
+           
 
+            public static void RemoveWordFromFile(string wordToRemove)
+            {
+                try
+                {
+                    if (File.Exists("words.txt"))
+                    {
+                        string[] words = File.ReadAllLines("words.txt");
+
+                        if (words.Contains(wordToRemove))
+                        {
+                            words = words.Where(word => word != wordToRemove).ToArray();
+
+                            File.WriteAllLines("words.txt", words);
+                            Console.WriteLine($"The word '{wordToRemove}' was removed from the file.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"The word '{wordToRemove}' was not found in the file.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("The file 'words.txt' does not exist.");
+                    }
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine($"Error reading or writing to the file: {ex.Message}");
+                }
+            }
+
+        public static string[] WordAndCharacterCount(string sentence)
+        {
+            string[] words = sentence.Split(new char[] { ' ', '.', ',', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
+            return words.Select(word => $"{word}: {word.Length}").ToArray();
+        }
 
     }
-}
+
+    }
+
+
+
+
+
+
+    
+
